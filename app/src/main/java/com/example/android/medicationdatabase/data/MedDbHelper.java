@@ -33,7 +33,6 @@ public class MedDbHelper extends SQLiteOpenHelper {
                 + MedEntry.COLUMN_MED_FREQUENCY + " INTEGER NOT NULL, "
                 + MedEntry.COLUMN_MED_DURATION + " TEXT NOT NULL DEFAULT one week);";
 
-
         db.execSQL(SQL_CREATE_MEDS_TABLE);
 
     }
