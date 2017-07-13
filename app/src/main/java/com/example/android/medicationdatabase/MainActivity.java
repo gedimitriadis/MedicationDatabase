@@ -13,6 +13,7 @@ import com.example.android.medicationdatabase.data.MedDbHelper;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.widget.Toast.makeText;
+import static com.example.android.medicationdatabase.data.MedContract.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mDbHelper = new MedDbHelper(this);
+        insertMed();
+        readMedPill();
     }
 
     private void insertMed(){
@@ -32,15 +35,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(MedContract.MedEntry.COLUMN_MED_NAME, "Aspirin" );
-        values.put(MedContract.MedEntry.COLUMN_MED_TYPE, MedContract.MedEntry.TYPE_PILL);
-        values.put(MedContract.MedEntry.COLUMN_MED_QUANTITY,1);
-        values.put(MedContract.MedEntry.COLUMN_MED_FREQUENCY, 2);
-        values.put(MedContract.MedEntry.COLUMN_MED_DURATION, "3 days");
+        values.put(MedEntry.COLUMN_MED_NAME, "Aspirin" );
+        values.put(MedEntry.COLUMN_MED_TYPE, MedEntry.TYPE_PILL);
+        values.put(MedEntry.COLUMN_MED_QUANTITY,1);
+        values.put(MedEntry.COLUMN_MED_FREQUENCY, 2);
+        values.put(MedEntry.COLUMN_MED_DURATION, "3 days");
 
 
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(MedContract.MedEntry.TABLE_NAME, null, values);
+        long newRowId = db.insert(MedEntry.TABLE_NAME, null, values);
         if (newRowId != -1) {
             makeText(getApplicationContext(), "Medication saved with ID: " + newRowId, Toast.LENGTH_SHORT).show();
         }else {
@@ -49,18 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void readMedPill(){
+    private Cursor readMedPill(){
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        String[] projection = { MedContract.MedEntry.COLUMN_MED_NAME};
-        String selection = MedContract.MedEntry.COLUMN_MED_TYPE + "=?";
-        String[] selectionArgs = new String[] { MedContract.MedEntry.TYPE_PILL };
+        String[] projection = { MedEntry.COLUMN_MED_NAME};
+        String selection = MedEntry.COLUMN_MED_TYPE + "=?";
+        String[] selectionArgs = new String[] { MedEntry.TYPE_PILL};
 
-        Cursor cursor = db.query(MedContract.MedEntry.TABLE_NAME, projection,
+        Cursor cursor = db.query(MedEntry.TABLE_NAME, projection,
                 selection, selectionArgs,
                 null, null, null);
-        cursor.close();
+        return cursor;
     }
+
+
 
 }
